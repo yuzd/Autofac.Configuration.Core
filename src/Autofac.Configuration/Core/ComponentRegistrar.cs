@@ -11,16 +11,16 @@
 // Software is furnished to do so, subject to the following
 // conditions:
 
+using Autofac.Builder;
+using Autofac.Configuration.Util;
+using Autofac.Core;
+using Autofac.Extras.DynamicProxy;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
-using Autofac.Builder;
-using Autofac.Configuration.Util;
-using Autofac.Core;
-using Microsoft.Extensions.Configuration;
 
 namespace Autofac.Configuration.Core
 {
@@ -71,6 +71,7 @@ namespace Autofac.Configuration.Core
             var defaultAssembly = configuration.DefaultAssembly();
             foreach (var component in configuration.GetSection("components").GetChildren())
             {
+               
                 var registrar = builder.RegisterType(component.GetType("type", defaultAssembly));
                 this.RegisterComponentServices(component, registrar, defaultAssembly);
                 this.RegisterComponentParameters(component, registrar);
@@ -80,6 +81,19 @@ namespace Autofac.Configuration.Core
                 this.SetComponentOwnership(component, registrar);
                 this.SetInjectProperties(component, registrar);
                 this.SetAutoActivate(component, registrar);
+
+                try
+                {
+                    var interceptedBy = component.GetType("interceptedBy", defaultAssembly);
+                    if (interceptedBy != null)
+                    {
+                        registrar.EnableInterfaceInterceptors().InterceptedBy(interceptedBy);
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
             }
         }
 
@@ -444,7 +458,7 @@ namespace Autofac.Configuration.Core
 
             if (component["injectProperties"].ToFlexibleBoolean())
             {
-                registrar.PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
+                registrar.PropertiesAutowired();
             }
         }
 

@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Autofac.Configuration.Util;
+using Autofac.Core;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using Autofac.Configuration.Util;
-using Autofac.Core;
-using Microsoft.Extensions.Configuration;
 
 namespace Autofac.Configuration.Core
 {
@@ -200,7 +200,7 @@ string.Equals(prop.Name, parameterName, StringComparison.OrdinalIgnoreCase);
         /// Thrown if the specified <paramref name="key"/> can't be resolved as a fully-qualified type name and
         /// isn't a partial type name for a <see cref="System.Type"/> found in the <paramref name="defaultAssembly"/>.
         /// </exception>
-        public static Type GetType(this IConfiguration configuration, string key, Assembly defaultAssembly)
+        public static Type GetType(this IConfiguration configuration, string key, Assembly defaultAssembly,bool throwEx = true)
         {
             if (configuration == null)
             {
@@ -218,7 +218,7 @@ string.Equals(prop.Name, parameterName, StringComparison.OrdinalIgnoreCase);
 
             if (type == null)
             {
-                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, ConfigurationResources.TypeNotFound, typeName));
+               if(throwEx) throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, ConfigurationResources.TypeNotFound, typeName));
             }
 
             return type;
