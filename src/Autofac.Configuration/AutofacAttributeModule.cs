@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Autofac.Builder;
@@ -33,10 +34,34 @@ namespace Autofac.Configuration
                 throw new ArgumentException(nameof(assemblyNameList));
             }
 
-            var all = AppDomain.CurrentDomain.GetAssemblies();
+            var all =GetAssemblies();
             _assemblyList = all.Where(assembly => assemblyNameList.Contains(assembly.GetName().Name)).ToArray();
         }
 
+        private IEnumerable<Assembly> GetAssemblies()
+        {
+            var list = new List<string>();
+            var stack = new Stack<Assembly>();
+
+            stack.Push(Assembly.GetEntryAssembly());
+
+            do
+            {
+                var asm = stack.Pop();
+
+                yield return asm;
+
+                foreach (var reference in asm.GetReferencedAssemblies())
+                    if (!list.Contains(reference.FullName))
+                    {
+                        stack.Push(Assembly.Load(reference));
+                        list.Add(reference.FullName);
+                    }
+
+            }
+            while (stack.Count > 0);
+
+        }
         protected override void Load(ContainerBuilder builder)
         {
             if (builder == null)
