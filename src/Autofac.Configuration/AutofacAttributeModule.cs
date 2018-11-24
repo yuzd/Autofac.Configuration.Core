@@ -15,7 +15,7 @@ namespace Autofac.Configuration
     /// </summary>
     public class AutofacAttributeModule : Module
     {
-        private Assembly[] _assemblyList;
+        private readonly Assembly[] _assemblyList;
 
         public AutofacAttributeModule(params Assembly[] assemblyList)
         {
@@ -68,7 +68,10 @@ namespace Autofac.Configuration
             {
                 throw new ArgumentNullException(nameof(builder));
             }
-
+            if (_assemblyList == null || _assemblyList.Length<1)
+            {
+                throw new ArgumentNullException(nameof(_assemblyList));
+            }
             var assemblyList = _assemblyList.Distinct();
             foreach (var assembly in assemblyList)
             {

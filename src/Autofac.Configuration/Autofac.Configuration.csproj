@@ -1,13 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>add interceptors</Description>
+    <Description>add attribute for load</Description>
     <Copyright>autofac</Copyright>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <AssemblyName>Autofac.Configuration.Core</AssemblyName>
     <PackageId>Autofac.Configuration.Core</PackageId>
     <PackageTags>autofac;di;ioc;dependencyinjection</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.1.0</Version>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
