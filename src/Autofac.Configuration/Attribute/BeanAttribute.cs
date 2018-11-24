@@ -30,6 +30,11 @@ namespace Autofac.Configuration.Attribute
         public Type As { get; set; }
 
         /// <summary>
+        /// 拦截器类型
+        /// </summary>
+        public Type InterceptorType{ get; set; }
+
+        /// <summary>
         /// 别名
         /// </summary>
         public string Named { get; set; }
