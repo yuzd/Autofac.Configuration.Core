@@ -9,6 +9,7 @@ artifacts/
 *.user
 *.sln.docstates
 *.ide
+.idea/
 Index.dat
 Storage.dat
 
