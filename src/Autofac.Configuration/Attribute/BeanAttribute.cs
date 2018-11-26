@@ -44,6 +44,18 @@ namespace Autofac.Configuration.Attribute
         /// </summary>
         public AutofacScope AutofacScope { get; set; } = AutofacScope.InstancePerLifetimeScope;
 
+
+        public BeanAttribute Clone()
+        {
+            return new BeanAttribute
+            {
+                As = this.As,
+                InterceptorType    = this.InterceptorType,
+                Named = this.Named,
+                AutofacScope = this.AutofacScope
+            };
+        }
+
     }
 
 }

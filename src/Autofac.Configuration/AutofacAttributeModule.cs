@@ -7,6 +7,7 @@ using Autofac.Configuration.Attribute;
 using Autofac.Core;
 using Autofac.Extras.DynamicProxy;
 using Castle.Components.DictionaryAdapter;
+using Castle.DynamicProxy.Internal;
 
 namespace Autofac.Configuration
 {
@@ -101,15 +102,21 @@ namespace Autofac.Configuration
 
                     }
 
-                    if (beanType.Type.BaseType == null || beanType.Type.BaseType == typeof(object))
+                    //注册为自己的类型
+                    builder.BindBuildWithScope(beanType.Type,beanType.Bean);
+
+                    if (beanType.Type.BaseType != null && beanType.Type.BaseType != typeof(object))
                     {
-                        //如果这个类没有继承
-                        beanType.Bean.As = null;
+                        //注册为自己的父类
+                        beanType.Bean.As = beanType.Type.BaseType;
                         builder.BindBuildWithScope(beanType.Type,beanType.Bean);
                     }
-                    else
+
+                    var interfaces = beanType.Type.GetAllInterfaces();
+                    if (interfaces.Length == 1)
                     {
-                        beanType.Bean.As = beanType.Type.BaseType;
+                        //如果只实现了一个接口那么就认为他是以该接口为对应注册
+                        beanType.Bean.As = interfaces[0];
                         builder.BindBuildWithScope(beanType.Type,beanType.Bean);
                     }
 
@@ -298,6 +305,15 @@ namespace Autofac.Configuration
                 catch (Exception)
                 {
                 };
+            }
+
+            if (string.IsNullOrEmpty(name))
+            {
+
+                //默认使用类的名字注册
+                var newBean = bean.Clone();
+                newBean.Named = fromType.Name;
+                BindBuildWithScope(builder,fromType,newBean);
             }
         }
 

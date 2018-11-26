@@ -54,6 +54,19 @@
         <e p="Autofac.Configuration.Test" t="IncludeRecursive">
           <e p="Autofac.Configuration.Test.csproj" t="IncludeRecursive" />
         </e>
+        <e p="TestAutofac" t="IncludeRecursive">
+          <e p="bin" t="ExcludeRecursive" />
+          <e p="obj" t="ExcludeRecursive">
+            <e p="Debug" t="Include">
+              <e p="netcoreapp2.1" t="Include">
+                <e p="TestAutofac.AssemblyInfo.cs" t="Include" />
+              </e>
+            </e>
+          </e>
+          <e p="Parent.cs" t="Include" />
+          <e p="Program.cs" t="Include" />
+          <e p="TestAutofac.csproj" t="IncludeRecursive" />
+        </e>
         <e p="TestProject1" t="IncludeRecursive">
           <e p="bin" t="ExcludeRecursive" />
           <e p="Model.cs" t="Include" />
